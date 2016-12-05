@@ -7,13 +7,10 @@ class Auth_model extends CI_Model {
     $this->load->database();
   }
   public function login($datos) {
-    $datos['user'] = $datos['user'];
     $datos['pass'] = md5($datos['pass']);
-    $this->db->escape($datos['user']);
     $user = $datos['user'];
     $pass = $datos['pass'];
-
-    $query = $this->db->query("select * from usuarios where username = '$user' and pass = '$pass' LIMIT 1");
+    $query = $this->db->query("select * from usuarios where username = '".$this->db->escape_str($user)."' and pass = '".$this->db->escape_str($pass)."' LIMIT 1");
     if ($query->num_rows() > 0) {
       return $query->result();
     }else {
