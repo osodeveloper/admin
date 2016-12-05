@@ -2,9 +2,9 @@ function fracaso(e) {
   return '<div class="ui error message"><i class="close icon"></i><div class="header">Error: </div><p>'+ e +'</p></div>'
 }
 function exito(e) {
-  return '<div class="ui success message"><i class="close icon"></i><div class="header">Inicio Exitoso: </div><p>'+ e +'</p></div>'
+  return '<div class="ui success message"><i class="close icon"></i><div class="header">Exito: </div><p>'+ e +'</p></div>'
 }
-function advertencia(){
+function advertencia(e){
   return '<div class="ui warning message"><i class="close icon"></i><div class="header">Advertencia: </div><p>'+ e +'</p></div>'
 }
 

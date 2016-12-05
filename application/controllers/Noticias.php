@@ -72,6 +72,10 @@ class Noticias extends CI_Controller {
 			unlink($this->upload_path . "/" . $file);
 		}
 	}
-
+	public function news_add(){
+		$data = $this->input->post();
+		$res = $this->Noticia_model->news_add($data);
+		echo json_encode($res);
+	}
 
 }

@@ -39,17 +39,20 @@ class Noticia_model extends CI_Model {
       return false;
     }
   }
-  public function user_add($datos) {
+  public function news_add($datos) {
 
     $array = array(
-      'username' => $datos['username'],
-      'pass' => md5($datos['pass']),
-      'fecha' => date("Y-m-d"),
-      'permisos' => $datos['permisos']
+      'titulo' => $datos['titulo'],
+      'contenido' => $datos['noticia'],
+      'fecha' => $datos['fecha'],
+      'estado' => $datos['estado']
     );
-    $salida = $this->db->insert('usuarios', $array);
-    return $salida;
-
+    $this->db->insert('noticias', $array);
+    if ($this->db->affected_rows()) {
+      return true;
+    }else {
+      return false;
+    }
   }
 
 
