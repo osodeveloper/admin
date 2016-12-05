@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Noticias extends CI_Controller {
+	protected $upload_path = 'overall/uploads/';
 	/**
 	 * Index Page for this controller.
 	 *
@@ -18,6 +19,9 @@ class Noticias extends CI_Controller {
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
   function __construct(){
+
+
+
     parent::__construct();
 		$this->load->library('session');
     $this->load->model('Noticia_model');
@@ -46,8 +50,9 @@ class Noticias extends CI_Controller {
 	}
 
 	public function uploadimg(){
+		var_dump($_FILES);
 		if (!empty($_FILES)) {
-			$config['upload_path'] = './uploads/';
+			$config['upload_path'] = $this->upload_path;
 			$config['allowed_types'] = 'gif|jpg|png';
 
 			$this->load->library('upload', $config);
@@ -56,6 +61,12 @@ class Noticias extends CI_Controller {
 			}else {
 				$data = $this->upload->data();
 			}
+		}
+	}
+	public function remove(){
+		$file = $this->input->post("file");
+		if ($file && file_exists($this->upload_path . "/" . $file)) {
+			unlink($this->upload_path . "/" . $file);
 		}
 	}
 

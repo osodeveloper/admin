@@ -2,11 +2,10 @@
 <html lang="es">
   <head>
     <?php $this->load->view('overall/head') ?>
-    <link rel="stylesheet" href="<?php echo base_url('overall/build/semantic.min.css') ?>" media="screen" title="no title">
   </head>
   <body class="nav-md">
     <div class="container body">
-      <div class="main_container">
+      <div class="main_container" style="background: #2a3f54;">
         <?php $this->load->view('overall/menu') ?>
 
           <div class="x_content">
