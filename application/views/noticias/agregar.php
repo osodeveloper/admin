@@ -31,11 +31,11 @@
                 </div>
                 <div class="field">
                   <label>Portada:</label>
-                  <input name="portada" type="file" placeholder="">
+                  <input type="file" name="portada" value="">
                 </div>
                 <div class="field">
                   <label>Contenido:</label>
-                  <textarea name="name" rows="8" cols="40"></textarea>
+                  <textarea id="contenido" name="name" rows="20"></textarea>
                 </div>
                 <div class="field">
                   <label>Estado:</label>
@@ -62,10 +62,24 @@
           </div>
         <!--fin container-->
     <?php $this->load->view('overall/footer') ?>
+    <script src="<?php echo base_url('overall/vendors/tinymce/tinymce.min.js') ?>" charset="utf-8"></script>
     <script src="<?php echo base_url('overall/vendors/dropzone4/dist/min/dropzone.min.js') ?>" charset="utf-8"></script>
+
     <script type="text/javascript">
+    tinymce.init({
+      selector: '#contenido',
+      menubar: false,
+      plugins: [
+        'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+        'searchreplace wordcount visualblocks visualchars code fullscreen',
+        'insertdatetime media nonbreaking save table contextmenu directionality',
+        'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc'
+      ]
+    });
+
     Dropzone.autoDiscover = false;
       var myDropzone = new Dropzone("#my-dropzone", {
+        paramName : 'file',
         url : "<?= base_url('noticias/uploadimg') ?>",
         acceptedFiles : 'image/*',
         addRemoveLinks : true,
@@ -80,7 +94,11 @@
           var _ref;
           return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
         },
-        dictRemoveFile : 'Eliminar Archivo'
+        maxFilesize : 2,
+        maxFiles : 2,
+        dictRemoveFile : 'Eliminar Archivo',
+        dictMaxFilesExceeded : 'No puedes subir más archivos.',
+        dictInvalidFileType : 'No puedes subir este tipo de archivo.'
       })
     </script>
   </body>

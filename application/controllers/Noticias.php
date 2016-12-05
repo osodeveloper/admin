@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Noticias extends CI_Controller {
 	protected $upload_path = 'overall/uploads/';
+	protected $archivos = array();
 	/**
 	 * Index Page for this controller.
 	 *
@@ -50,18 +51,20 @@ class Noticias extends CI_Controller {
 	}
 
 	public function uploadimg(){
-		var_dump($_FILES);
-		if (!empty($_FILES)) {
-			$config['upload_path'] = $this->upload_path;
-			$config['allowed_types'] = 'gif|jpg|png';
 
-			$this->load->library('upload', $config);
-			if (!$this->upload->do_upload("file")) {
-				echo $this->upload->display_errors();
-			}else {
-				$data = $this->upload->data();
+		if (!empty($_FILES)) {
+
+				$config['upload_path'] = $this->upload_path;
+				$config['allowed_types'] = 'gif|jpg|png|jpeg';
+				$this->load->library('upload', $config);
+
+				if (!$this->upload->do_upload("file")) {
+					echo $this->upload->display_errors();
+				}else {
+					$data = $this->upload->data();
+					array_push($this->archivos, $this->upload->data());
+				}
 			}
-		}
 	}
 	public function remove(){
 		$file = $this->input->post("file");
