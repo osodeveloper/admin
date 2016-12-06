@@ -4,25 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Noticias extends CI_Controller {
 	protected $upload_path = 'overall/uploads/';
 	protected $archivos = array();
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
+	//######################################################
   function __construct(){
-
-
-
     parent::__construct();
 		$this->load->library('session');
     $this->load->model('Noticia_model');
@@ -44,38 +27,76 @@ class Noticias extends CI_Controller {
 	public function borrar($id = NULL) {
 		if ($id != NULL) {
 			$res = $this->Usuario_model->user_del($id);
-			redirect('usuarios');
+			redirect('noticias');
 		}else {
-			redirect('usuarios');
+			redirect('noticias');
 		}
 	}
+	public function upload_port() {
+		if (!empty($_FILES['port']['name'])) {
 
-	public function uploadimg(){
+			/*
+			$fichero_subido = $this->upload_path . basename($_FILES['port']['name']);
 
-		if (!empty($_FILES)) {
+			if (move_uploaded_file($_FILES['port']['tmp_name'], $fichero_subido)) {
 
-				$config['upload_path'] = $this->upload_path;
-				$config['allowed_types'] = 'gif|jpg|png|jpeg';
-				$this->load->library('upload', $config);
-
-				if (!$this->upload->do_upload("file")) {
-					echo $this->upload->display_errors();
-				}else {
-					$data = $this->upload->data();
-					array_push($this->archivos, $this->upload->data());
-				}
+				$this->archivos[] = $_FILES['port']['tmp_name'];
 			}
+			*/
+
+			$config['upload_path'] = $this->upload_path;
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+
+			if ($this->upload->do_upload("port")) {
+				$data = array("upload_data" => $this->upload->data());
+				$datos = array(
+					'titulo' => 'Noticia de Prueba',
+					'portada' => $data["upload_data"]["file_name"],
+					'contenido' => 'Hola como estas',
+					'fecha' => '2016-12-05',
+					'estado' => 'OK',
+				);
+				$this->Noticia_model->add_test($datos);
+			}else {
+				echo $this->upload->display_errors();
+			}
+		}
 	}
-	public function remove(){
-		$file = $this->input->post("file");
+	public function upload_gall(){
+		if (!empty($_FILES)) {
+			$config['upload_path'] = $this->upload_path;
+			$config['file_name'] = $_FILES['gall']['name'];
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			if (!$this->upload->do_upload("gall")) {
+				echo $this->upload->display_errors();
+			}else {
+				$data = $this->upload->data();
+				$this->archivos = array('name ' => $data["raw_name"]);
+			}
+		}
+	}
+	public function remove_port() {
+		$file = $this->input->post("port");
 		if ($file && file_exists($this->upload_path . "/" . $file)) {
 			unlink($this->upload_path . "/" . $file);
 		}
 	}
+	public function remove_gall(){
+		$file = $this->input->post("gall");
+		if ($file && file_exists($this->upload_path . "/" . $file)) {
+			unlink($this->upload_path . "/" . $file);
+		}
+	}
+	public function add_nombres($data) {
+
+	}
 	public function news_add(){
 		$data = $this->input->post();
-		$res = $this->Noticia_model->news_add($data);
-		echo json_encode($res);
+		//$data['archivos'] = $this->archivos;
+		//$res = $this->Noticia_model->news_add($data);
+		echo json_encode($this->archivos);
 	}
 
 }

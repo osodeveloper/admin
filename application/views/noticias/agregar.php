@@ -25,28 +25,35 @@
                   <label>Titulo:</label>
                   <input name="titulo" type="text" placeholder="Titulo de la Noticia">
                 </div>
-                <div class="field">
-                  <label>Fecha:</label>
-                  <input name="fecha" type="date" placeholder="Fecha">
-                </div>
-                <div class="field">
-                  <label>Portada:</label>
-                  <input type="file" name="portada" value="">
+                <div class="three fields">
+                  <div class="field">
+                    <label>Fecha:</label>
+                    <input name="fecha" type="date" placeholder="Fecha">
+                  </div>
+                  <div class="field">
+                    <label>Estado:</label>
+                    <select class="ui dropdown" name="estado">
+                      <option value="">Seleccionar...</option>
+                      <option value="OK">Mostrar</option>
+                      <option value="NOOK">No Mostrar</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Portada:</label>
+                    <div id="port-dropzone" class="dropzone">
+                      <div class="dz-message">
+                        <h4>Selecciona una portada,<b> haciendo click aquí.</b></h4>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="field">
                   <label>Contenido:</label>
                   <textarea id="contenido" name="contenido" rows="20"></textarea>
                 </div>
-                <div class="field">
-                  <label>Estado:</label>
-                  <select class="ui dropdown" name="estado">
-                    <option value="">Seleccionar...</option>
-                    <option value="OK">Mostrar</option>
-                    <option value="NOOK">No Mostrar</option>
-                  </select>
-                </div>
+
                 <label>Galeria de Imagenes:</label>
-                <div id="my-dropzone" class="dropzone">
+                <div id="gall-dropzone" class="dropzone">
                   <div class="dz-message">
                     <h4>Suelta los archivos aquí o <strong> pulsa aquí para subir.</strong></h4>
                   </div>
@@ -78,18 +85,9 @@
                 rules: [{
                     type : "empty"
                 }]
-            }
-            /*,
+            },
             fecha : {
               identifier : 'fecha',
-              rules : [
-                {
-                type: 'empty'
-                }
-              ]
-            },
-            portada : {
-              identifier : 'portada',
               rules : [
                 {
                 type: 'empty'
@@ -104,20 +102,20 @@
                 }
               ]
             }
-            */
         },
         onSuccess: function(e) {
           e.preventDefault();
           var ed = tinymce.get('contenido');
           var data = ed.getContent();
-          //var contenido = tinymce.activeEditor.getContent(); //ok
           formulario.addClass('loading')
           $.ajax({
             type : "POST",
             url : nucleo('noticias/news_add'),
             data : formulario.serialize() +'&noticia=' + escape(data),
             success : function(json) {
+              console.log(json);
               var obj = jQuery.parseJSON(json);
+              console.log(obj);
               if (obj) {
                 formulario.removeClass('loading')
                 $('#ajax_resp').html(exito('Datos Ingresados Correctamente.'))

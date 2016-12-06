@@ -54,6 +54,14 @@ class Noticia_model extends CI_Model {
       return false;
     }
   }
+  public function add_test($datos) {
+    $this->db->insert('noticias', $datos);
+    if ($this->db->affected_rows()) {
+      return true;
+    }else {
+      return false;
+    }
+  }
 
 
 }
