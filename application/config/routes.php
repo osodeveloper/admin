@@ -54,6 +54,6 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['usuarios'] = 'usuarios';
 $route['noticias'] = 'noticias';
+$route['ventas'] = 'ventas';
 $route['auth'] = 'auth';
-$route['imagenes'] = 'imagenes';
 //$route['usuarios/agregar'] = 'usuarios/agregar';

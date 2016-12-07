@@ -7,6 +7,7 @@ tinymce.init({
 });
 
 Dropzone.autoDiscover = false;
+
   var dropzone_port = new Dropzone("#port-dropzone", {
     paramName : 'port',
     url : nucleo('noticias/upload_port'),
