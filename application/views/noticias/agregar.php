@@ -19,6 +19,9 @@
       <div class="main_container" style="background: #2a3f54;">
         <?php $this->load->view('overall/menu') ?>
           <div class="x_content">
+            <?php var_dump($galeria) ?>
+            <br>
+            <?php var_dump($portada);  ?>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <form class="ui form" id="form_noticia">
                 <div class="field">

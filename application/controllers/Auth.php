@@ -41,7 +41,8 @@ class Auth extends CI_Controller {
       $data = array(
         'auth' => true,
         'num' => $res[0]->id,
-        'username'  => $res[0]->username
+        'username'  => $res[0]->username,
+				'galeria' => array()
       );
       $this->session->set_userdata($data);
       echo json_encode(true);

@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Noticias extends CI_Controller {
 	protected $upload_path = 'overall/uploads/';
-	protected $archivos = array();
 	//######################################################
   function __construct(){
     parent::__construct();
@@ -20,8 +19,12 @@ class Noticias extends CI_Controller {
 		));
 	}
 	public function agregar() {
+		$this->session->unset_userdata('portada');
+		$this->session->unset_userdata('galeria');
 		$this->load->view('noticias/agregar', array(
-			'title' => 'Agregar Noticias'
+			'title' => 'Agregar Noticias',
+			'galeria' => $this->session->userdata("galeria"),
+			'portada' => $this->session->userdata("portada"),
 		));
 	}
 	public function borrar($id = NULL) {
@@ -32,17 +35,18 @@ class Noticias extends CI_Controller {
 			redirect('noticias');
 		}
 	}
+
+	public function news_add(){
+		$data = $this->input->post();
+		$data['portada'] = (string) $this->session->userdata("portada");
+		$data['user'] = (string)  $this->session->userdata("username");
+		$res = $this->Noticia_model->news_add($data);
+		echo json_encode($res);
+	}
+
+
 	public function upload_port() {
 		if (!empty($_FILES['port']['name'])) {
-
-			/*
-			$fichero_subido = $this->upload_path . basename($_FILES['port']['name']);
-
-			if (move_uploaded_file($_FILES['port']['tmp_name'], $fichero_subido)) {
-
-				$this->archivos[] = $_FILES['port']['tmp_name'];
-			}
-			*/
 
 			$config['upload_path'] = $this->upload_path;
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -50,30 +54,37 @@ class Noticias extends CI_Controller {
 
 			if ($this->upload->do_upload("port")) {
 				$data = array("upload_data" => $this->upload->data());
-				$datos = array(
-					'titulo' => 'Noticia de Prueba',
-					'portada' => $data["upload_data"]["file_name"],
-					'contenido' => 'Hola como estas',
-					'fecha' => '2016-12-05',
-					'estado' => 'OK',
+				$imagenes = array(
+					'portada' => $data["upload_data"]["file_name"]
 				);
-				$this->Noticia_model->add_test($datos);
+				$this->session->set_userdata($imagenes);
 			}else {
 				echo $this->upload->display_errors();
 			}
 		}
 	}
 	public function upload_gall(){
+
 		if (!empty($_FILES)) {
+
 			$config['upload_path'] = $this->upload_path;
 			$config['file_name'] = $_FILES['gall']['name'];
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
 			$this->load->library('upload', $config);
+
 			if (!$this->upload->do_upload("gall")) {
+
 				echo $this->upload->display_errors();
 			}else {
-				$data = $this->upload->data();
-				$this->archivos = array('name ' => $data["raw_name"]);
+				$imagenes = $this->session->userdata("galeria");
+
+				$actual = array("upload_data" => $this->upload->data());
+				$imagenes[] = $actual["upload_data"]["file_name"];
+
+				$array = array(
+					'galeria' => $imagenes
+				);
+				$this->session->set_userdata($array);
 			}
 		}
 	}
@@ -81,22 +92,26 @@ class Noticias extends CI_Controller {
 		$file = $this->input->post("port");
 		if ($file && file_exists($this->upload_path . "/" . $file)) {
 			unlink($this->upload_path . "/" . $file);
+			$this->session->unset_userdata('portada');
 		}
 	}
 	public function remove_gall(){
 		$file = $this->input->post("gall");
+		$data = $this->session->userdata("galeria");
+
 		if ($file && file_exists($this->upload_path . "/" . $file)) {
+
+			if (($key = array_search($file, $data)) !== false) {
+			  unset($data[$key]);
+			}
 			unlink($this->upload_path . "/" . $file);
+			$array = array(
+				'galeria' => $data
+			);
+			$this->session->unset_userdata("galeria");
+			$this->session->set_userdata($array);
 		}
 	}
-	public function add_nombres($data) {
 
-	}
-	public function news_add(){
-		$data = $this->input->post();
-		//$data['archivos'] = $this->archivos;
-		//$res = $this->Noticia_model->news_add($data);
-		echo json_encode($this->archivos);
-	}
 
 }

@@ -40,12 +40,13 @@ class Noticia_model extends CI_Model {
     }
   }
   public function news_add($datos) {
-
     $array = array(
       'titulo' => $datos['titulo'],
       'contenido' => $datos['noticia'],
       'fecha' => $datos['fecha'],
-      'estado' => $datos['estado']
+      'estado' => $datos['estado'],
+      'portada' => $datos['portada'],
+      'user' => $datos['user']
     );
     $this->db->insert('noticias', $array);
     if ($this->db->affected_rows()) {
